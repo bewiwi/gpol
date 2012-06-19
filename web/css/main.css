@@ -1,0 +1,15 @@
+#div_title{
+  text-align: right;
+  margin-top: 6px;
+}
+
+#title{
+ color: white;
+  font-size:  20px;
+  font-weight: bold;
+}
+#subtitle{
+  color: white;
+   font-size:  15px;
+   font-style:italic; ;
+}

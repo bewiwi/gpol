@@ -1,0 +1,118 @@
+#!/bin/bash
+CONF_FILE=/etc/gpol/gpol.conf
+
+##check root
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+function log_gpol {
+    echo $( date ) $1
+}
+
+
+if [ -f $CONF_FILE ]
+then
+    . $CONF_FILE
+fi
+
+if [ -z "$FOLDER_VAR" ]
+then
+	echo "FOLDER_VAR undefined"
+	exit 1
+fi
+
+if [ ! -d $FOLDER_VAR ]
+then
+	mkdir -p $FOLDER_VAR
+fi
+
+
+if [ -z "$LOG_FILE" ]
+then
+    LOG_FILE=/var/log/gpol
+    echo "LOG_FILE undefined using $LOG_FILE"
+fi
+
+log_gpol "Boot"
+if [ -z "$FILE_VAR" ]
+then
+    echo "FILE_VAR undefined"
+    exit 1
+fi
+if [ -z "$URL_SERVER_GPOL" ]
+then
+    echo "URL_SERVER_GPOL undefined"
+    exit 1
+fi
+if [ -z "$TMP_FOLDER" ]
+then
+    echo "TMP_FOLDER undefined"
+    exit 1
+fi
+if [ ! -d $(dirname $FILE_VAR) ]; then
+    mkdir -p $(dirname $FILE_VAR)
+fi
+
+##Prepare config##
+network=$(/sbin/ifconfig | sed -n '
+/^eth/,/^$/{
+1 {
+s/\([^ ]*\).*ddr \(.*\)/\1 \2/p
+}
+2 {
+s/.*adr:\([^ ]*\).*/\1/p
+}
+}' | sed 'N;s/\n//')
+ip=$(echo $network|cut -d' ' -f 3)
+hostname=$(hostname)
+serie=$(dmidecode -s system-serial-number)
+if [ $serie = "0" ]
+then
+        #If no serial use mac address
+	serie=$(echo $network|cut -d' ' -f 2)
+fi
+os=$(lsb_release -i -s )
+osv=$(lsb_release -r -s )
+os=$(echo $os$osv)
+##End config##
+
+##file generation
+>$FILE_VAR #create or empty file
+chmod 644 $FILE_VAR
+cat > $FILE_VAR << EOF
+ip=$ip
+hostname=$hostname
+serie=$serie
+os=$os
+EOF
+##end generation
+
+
+
+##contact gpol get list gpol to dl
+URL=$URL_SERVER_GPOL"getg/boot/$serie/$os/$hostname/$ip"
+log_gpol "contact gpol server $URL"
+
+IDS=$(curl "$URL" -s)
+for ID in $IDS
+do
+    if [[ $ID = *[![:digit:]]* ]]
+    then
+        echo 'Invalid GpoID'
+        exit 1
+    fi
+    if [ ! -d $FOLDER_VAR/boot/tmp ]
+    then
+ 	mkdir -p $FOLDER_VAR/boot/tmp
+    fi
+    ##Download
+    URLID=$URL_SERVER_GPOL"dl/$serie/$ID"
+    curl $URLID -o $FOLDER_VAR/boot/tmp/gpol-$ID -s
+    chmod +x $FOLDER_VAR/boot/tmp/gpol-$ID
+    log_gpol "Download gpol $ID URLID"
+
+done
+mv $FOLDER_VAR/boot/tmp/* $FOLDER_VAR/boot/
+log_gpol "END"
+

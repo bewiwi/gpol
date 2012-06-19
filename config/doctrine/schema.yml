@@ -1,0 +1,112 @@
+Gpol:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    name: {type: string(255), notnull: true }
+    type: {type: integer, notnull: true }
+    description: {type: string(255), notnull: true }
+    script: {type: string(1000000) }
+
+Host:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    name: {type: string(255), notnull: true }
+    ip: {type: string(30) }
+    serial: {type: string(255)}
+    os:  {type: string(255)}
+    lastcontact: {type:TIMESTAMP }
+    enable: {type: boolean}
+
+User:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    description: {type: string(255) }
+    name: {type: string(255), notnull: true }
+    lastcontact: {type:TIMESTAMP }
+    enable: {type: boolean}
+
+Config:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    name: {type: string(255), notnull: true }
+    value: {type: string(255) }
+    description: {type: string(255) }
+
+Log:
+  columns:
+        id: {type: integer, notnull: true,primary: true,autoincrement: true}
+        level: {type: string(255) , notnull: true }
+        action: {type: string(255) , notnull: true}
+        detail: {type: string(255) }
+        host_id: {type: integer}
+        user_id: {type: integer}
+        date: {type:TIMESTAMP , notnull: true}
+  relations:
+        User: { onDelete: CASCADE, local: user_id, foreign: id, type: many }
+        Host: { onDelete: CASCADE, local: host_id, foreign: id, type: many }
+
+
+LinkGpolHost:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    gpol_id: {type: integer, notnull: true}
+    host_id: {type: integer, notnull: true}
+  relations:
+      Gpol:  { onDelete: CASCADE, local: gpol_id, foreign: id,type: many }
+      Host: { onDelete: CASCADE, local: host_id, foreign: id, type: many }
+
+LinkGpolUser:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    gpol_id: {type: integer, notnull: true}
+    user_id: {type: integer, notnull: true}
+  relations:
+      Gpol:  { onDelete: CASCADE, local: gpol_id, foreign: id,type: many  }
+      User: { onDelete: CASCADE, local: user_id, foreign: id,type: many  }
+
+GroupHost:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    name: {type: string(255), notnull: true }
+    description: {type: string(255), notnull: true }
+
+GroupUser:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    name: {type: string(255), notnull: true }
+    description: {type: string(255), notnull: true }
+
+LinkGroupHost:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    host_id: {type: integer, notnull: true}
+    group_host_id: {type: integer, notnull: true}
+  relations:
+      Host:  { onDelete: CASCADE, local: host_id, foreign: id,type: many  }
+      GroupHost: { onDelete: CASCADE, local: group_host_id, foreign: id ,type: many }
+
+LinkGroupUser:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    user_id: {type: integer, notnull: true}
+    group_user_id: {type: integer, notnull: true}
+  relations:
+      User:  { onDelete: CASCADE, local: user_id, foreign: id,type: many  }
+      GroupUser: { onDelete: CASCADE, local: group_user_id, foreign: id ,type: many }
+
+LinkGpolGroupHost:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    gpol_id: {type: integer, notnull: true}
+    group_host_id: {type: integer, notnull: true}
+  relations:
+      Gpol:  { onDelete: CASCADE, local: gpol_id, foreign: id,type: many  }
+      GroupHost: { onDelete: CASCADE, local: group_host_id, foreign: id ,type: many }
+
+LinkGpolGroupUser:
+  columns:
+    id: {type: integer, notnull: true,primary: true,autoincrement: true}
+    gpol_id: {type: integer, notnull: true}
+    group_user_id: {type: integer, notnull: true}
+  relations:
+      Gpol:  { onDelete: CASCADE, local: gpol_id, foreign: id,type: many  }
+      GroupUser: { onDelete: CASCADE, local: group_user_id, foreign: id ,type: many }

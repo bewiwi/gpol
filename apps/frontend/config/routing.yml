@@ -1,0 +1,36 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: gpol, action: index }
+
+getgboot:
+  url: /getg/boot/:serial/:os/:name/:ip
+  param: { module: getGpols, action: index, type: boot }
+  options: { segment_separators: ['/'] }
+
+getglogin:
+  url: /getg/login/:serial/:os/:name/:ip/:login/*
+  param: { module: getGpols, action: index, type: login }
+  options: { segment_separators: ['/'] }
+
+download:
+  url: /dl/:serial/:id
+  param: { module: getGpols, action: download }
+  options: { segment_separators: ['/'] }
+
+script:
+  url: /script/:filename
+  param: { module: script, action: index }
+  options: { segment_separators: ['/'] }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

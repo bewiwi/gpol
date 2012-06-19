@@ -1,0 +1,115 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          gpol
+# Required-Start:    $local_fs $remote_fs $syslog $named $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start gpol
+# chkconfig: 2345 98 02
+# Description:       Gpol is used to send script to computer client
+### END INIT INFO
+
+case "$1" in
+    start)
+        CONF_FILE=/etc/gpol/gpol.conf
+
+        function log_gpol {
+            echo $( date ) $1
+        }
+
+
+        if [ -f $CONF_FILE ]
+        then
+            . $CONF_FILE
+        fi
+
+
+        if [ -z "$LOG_FILE" ]
+        then
+            LOG_FILE=/var/log/gpol
+            echo "LOG_FILE undefined using $LOG_FILE"
+        fi
+
+        exec 3>&1 4>&2 1>>$LOG_FILE 2>&1 ;
+        log_gpol "Boot"
+        if [ -z "$FILE_VAR" ]
+        then
+            echo "FILE_VAR undefined"
+            exit 1
+        fi
+        if [ -z "$URL_SERVER_GPOL" ]
+        then
+            echo "URL_SERVER_GPOL undefined"
+            exit 1
+        fi
+        if [ -z "$TMP_FOLDER" ]
+        then
+            echo "TMP_FOLDER undefined"
+            exit 1
+        fi
+        if [ ! -d $(dirname $FILE_VAR) ]; then
+            mkdir -p $(dirname $FILE_VAR)
+        fi
+
+	 ##Prepare config##
+	network=$(/sbin/ifconfig | sed -n '
+	/^eth/,/^$/{
+	1 {
+	s/\([^ ]*\).*ddr \(.*\)/\1 \2/p
+	}
+	2 {
+	s/.*adr:\([^ ]*\).*/\1/p
+	}
+	}' | sed 'N;s/\n//')
+	ip=$(echo $network|cut -d' ' -f 3)
+	hostname=$(hostname)
+	serie=$(dmidecode -s system-serial-number)
+	if [ $serie = "0" ]
+	then
+		#If no serial use mac address
+		serie=$(echo $network|cut -d' ' -f 2)
+	fi
+	os=$(lsb_release -i -s )
+	osv=$(lsb_release -r -s )
+	os=$(echo $os$osv)
+	##End config##
+
+	##file generation
+	>$FILE_VAR #create or empty file
+	chmod 644 $FILE_VAR
+	cat > $FILE_VAR << EOF
+	ip=$ip
+	hostname=$hostname
+	serie=$serie
+	os=$os
+EOF
+	##end generation
+
+
+
+        ##contact gpol get list gpol to dl
+        log_gpol "contact gpol server $URL"
+
+        IDS=$(ls $FOLDER_VAR/boot/)
+        for ID in $IDS
+        do
+            if [[ -d $FOLDER_VAR/boot/$ID  ]]
+            then
+                continue
+            fi
+
+            ##Launch
+            chmod +x $FOLDER_VAR/boot/$ID 
+            log_gpol "Launch gpol $ID"
+            $FOLDER_VAR/boot/$ID 
+            log_gpol "End of gpol $ID"
+        done
+        log_gpol "END"
+
+        #Restauration des descripteurs de fichiers pour stdout et stderr
+        exec 1>&3 2>&4 3>&- 4>&- ;
+
+    ;;
+esac
+
+exit 0

@@ -1,0 +1,31 @@
+GroupHost:
+  GroupHost_-1:
+    id: -1
+    name: All
+    description: 'All host'
+Config:
+  Config_1:
+    name: host_ip
+    value: '0'
+    description: "0=ip send by host\r\n1=ip of host who contact"
+  Config_2:
+    name: user_prefix
+    value: ABC-OBJECTIF/
+    description: 'remove user prefix'
+  Config_3:
+    name: user_default_enable
+    value: '1'
+    description: "1 => New user are enable\r\n0 => New user are disable"
+  Config_4:
+    name: host_default_enable
+    value: '1'
+    description: "1 => New host are enable\r\n0 => New host are disable"
+  Config_5:
+    name: enable_script_download
+    value: '1'
+    description: "1 => client script are accessible\r\n0 => client script are hidden\r\n /!\ 1 is required for client install"
+GroupUser:
+  GroupUser_-1:
+    id: -1
+    name: All
+    description: 'All user'
