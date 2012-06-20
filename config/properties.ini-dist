@@ -1,0 +1,10 @@
+[symfony]
+  name=gpol
+  author=PORTE Loïc
+  orm=Doctrine
+
+[production]
+  host=
+  user=
+  dir=
+  parameters="-azc --force --progress --delete --exclude-from=config/rsync_exclude.txt"
