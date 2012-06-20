@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="029e08bf-0c48-4ed9-b08d-efc139ca6bca" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LICENCE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="gpol.iws" />
@@ -28,7 +29,7 @@
       <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="14" selection-start="296" selection-end="296" vertical-scroll-proportion="0.1978022">
+            <state line="14" column="0" selection-start="313" selection-end="313" vertical-scroll-proportion="0.23076923">
               <folding />
             </state>
           </provider>
@@ -66,10 +67,10 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/config/databases.yml-dist" />
         <option value="$PROJECT_DIR$/LICENCE" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -348,7 +349,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="14" selection-start="296" selection-end="296" vertical-scroll-proportion="0.1978022">
+        <state line="14" column="0" selection-start="313" selection-end="313" vertical-scroll-proportion="0.23076923">
           <folding />
         </state>
       </provider>
