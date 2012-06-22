@@ -3,6 +3,7 @@ log/*
 web/uploads/*
 config/databases.yml
 config/propel.ini
+config/properties.ini
 data/sql/*
 lib/filter/doctrine/base/Base*
 lib/filter/doctrine/*Plugin/base/Base*

@@ -38,8 +38,7 @@ ex with apache :
                 Order allow,deny
                 allow from all
 	    </Directory>
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
     </VirtualHost>
 
 
@@ -59,7 +58,7 @@ if your web manager is on URL : http://gpol/
 With root user
 >\#bash install.sh http://gpol/
 
-Now you can see the computer in the web interface and in the next login of the user you can see the user.
+Now you can see the computer in the web interface and at the next login of the user you can see the user.
 
 Log
 ====

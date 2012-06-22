@@ -71,7 +71,8 @@ mv $TMP_FOLDER/getgpol /usr/bin/
 chmod +x  /usr/bin/getgpol
 
 ##CRONTAB###
-echo "*/15 * * * *	root	/usr/bin/getgpol > /dev/null" > /etc/cron.d/gpol
+echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin">/etc/cron.d/gpol
+echo "*/15 * * * *	root	/usr/bin/getgpol > /dev/null" >> /etc/cron.d/gpol
 
 ###GPOL INIT###
 mv $TMP_FOLDER/gpol /etc/init.d/

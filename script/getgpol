@@ -67,7 +67,7 @@ s/.*adr:\([^ ]*\).*/\1/p
 ip=$(echo $network|cut -d' ' -f 3)
 hostname=$(hostname)
 serie=$(dmidecode -s system-serial-number)
-if [ $serie = "0" ]
+	if [ $serie == "0" ] || [ $serie == "" ]
 then
         #If no serial use mac address
 	serie=$(echo $network|cut -d' ' -f 2)
@@ -113,6 +113,6 @@ do
     log_gpol "Download gpol $ID URLID"
 
 done
-mv $FOLDER_VAR/boot/tmp/* $FOLDER_VAR/boot/
+mv $FOLDER_VAR/boot/tmp/* $FOLDER_VAR/boot/ 2>/dev/null
 log_gpol "END"
 

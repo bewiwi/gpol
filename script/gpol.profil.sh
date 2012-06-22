@@ -59,16 +59,22 @@ IDS=$(curl "$URL" -s)
 for ID in $IDS
 do
 
-    if [[ $ID = *[![:digit:]]* ]]
-    then
-        echo 'Invalid GpoID'
-        exit 1
-    fi
+  if [  "`echo $ID | egrep ^[[:digit:]]+$`" = "" ]; then
+    echo "Invalid GpoID"
+    exit 0
+  fi
+
 	curl  $URL_SERVER_GPOL"dl/$serie/$ID" -o $TMP_FOLDER/gpol-$ID -s
 	#echo  $URL_SERVER_GPOL"dl/$serie/$ID" -o $TMP_FOLDER/gpol-$ID -s
 	chmod +x $TMP_FOLDER/gpol-$ID
 	$TMP_FOLDER/gpol-$ID
-	rm $TMP_FOLDER/gpol-$ID
+  #Use to set the connection imposible if the scrit return error
+	if [ $? = 1 ]
+  then
+    echo "GPOL disconnect user : ID: $ID "
+    exit 1
+  fi
+	rm -f $TMP_FOLDER/gpol-$ID
 done
 
 exec 1>&3 2>&4 3>&- 4>&- ;
